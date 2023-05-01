@@ -17,7 +17,7 @@ public class Printf {
         int version = Integer.getInteger("java.specification.version");
         System.out.printf("Java version: %d\n", version);
         try(Arena offHeap = Arena.openConfined()) {
-            MemorySegment formatStr = offHeap.allocateUtf8String("Java FFM call to printf %d");
+            MemorySegment formatStr = offHeap.allocateUtf8String("Java FFM call to printf %d\n");
             int rtn = (int) printf.invoke(formatStr, version);
             System.out.printf("cprintf rtn: %d\n", rtn);
         }
