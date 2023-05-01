@@ -4,8 +4,7 @@ import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.util.Optional;
 
-import static java.lang.foreign.ValueLayout.ADDRESS;
-import static java.lang.foreign.ValueLayout.JAVA_INT;
+import static java.lang.foreign.ValueLayout.*;
 
 public class Rand {
     public static void main(String[] args) throws Throwable {
@@ -18,7 +17,11 @@ public class Rand {
         try(Arena offHeap = Arena.openConfined()) {
             MemorySegment seedMS = offHeap.allocate(JAVA_INT, seed);
             int rtn = (int) rand.invoke(seedMS);
-            System.out.printf("rand rtn: %d\n", rtn);
+            System.out.printf("rand(%d), seed: %d\n", rtn, seedMS.get(JAVA_INT, 0L));
+            for (int n = 0; n < 10; n ++) {
+                rtn = (int) rand.invoke(seedMS);
+                System.out.printf("rand(%d), seed: %d\n", rtn, seedMS.get(JAVA_INT, 0L));
+            }
         }
     }
 }
